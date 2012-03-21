@@ -9,6 +9,7 @@ import android.widget.Button;
 public class MainActivity extends Activity {
 
     private MediaPlayer mediaPlayer;
+    private static boolean isPlaying = false;
 
     /**
      * Called when the activity is first created.
@@ -38,13 +39,15 @@ public class MainActivity extends Activity {
     }
 
     private void initHandlers() {
-        Button playButton = (Button) findViewById(R.id.playButton);
+        final Button playButton = (Button) findViewById(R.id.playButton);
         Button stopButton = (Button) findViewById(R.id.stopButton);
 
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 playSound();
+                isPlaying = true;
+                playButton.setEnabled(false);
             }
         });
 
@@ -52,12 +55,15 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 stopSound();
+                isPlaying = false;
+                playButton.setEnabled(true);
             }
         });
     }
 
     private void playSound() {
         if (mediaPlayer != null) {
+//            mediaPlayer.setVolume(100.0f, 100.0f);
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
         }
