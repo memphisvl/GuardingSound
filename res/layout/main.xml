@@ -4,35 +4,33 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
 
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="MainActivity"/>
+    <TextView android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="Energy saving"/>
 
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dip">
+    <Spinner android:id="@+id/energyType"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:prompt="@string/energy_prompt"/>
 
-        <Button
-                android:id="@+id/playButton"
+    <TextView android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:text="Sound type"/>
+
+    <Spinner android:id="@+id/soundType"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:prompt="@string/sound_prompt"/>
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="30dip">
+
+        <Button android:id="@+id/playStopButton"
                 android:layout_width="fill_parent"
                 android:layout_height="70dip"
                 android:text="Play"/>
-
     </LinearLayout>
-
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dip">
-        <Button
-                android:id="@+id/stopButton"
-                android:layout_width="fill_parent"
-                android:layout_height="70dip"
-                android:text="Stop"/>
-    </LinearLayout>
-
 
 </LinearLayout>
 

@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GuardingSound</string>
+
+    <string name="energy_prompt">Choose length</string>
+    <string-array name="energy_array">
+        <item>15 sec play / 45 sec pause</item>
+        <item>30 sec play / 30 sec pause</item>
+        <item>45 sec play / 15 sec pause</item>
+        <item>Continuous play</item>
+    </string-array>
+
+    <string name="sound_prompt">Choose sound</string>
+    <string-array name="sound_array">
+        <item>Dragonfly simple</item>
+        <item>Dragonfly -6Db</item>
+    </string-array>
 </resources>
