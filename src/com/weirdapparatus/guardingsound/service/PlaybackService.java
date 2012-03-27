@@ -21,6 +21,8 @@ import java.io.IOException;
  */
 public class PlaybackService extends Service {
 
+    private static EnergySavingType playbackType;
+
     private AssetFileDescriptor descriptor;
     private MediaPlayer mediaPlayer;
 
@@ -31,13 +33,14 @@ public class PlaybackService extends Service {
         @Override
         public void run() {
             playResume(true);
+            pauseFor(playbackType);
         }
     };
-
     private final Runnable resumeSound = new Runnable() {
         @Override
         public void run() {
             playResume(false);
+            playFor(playbackType);
         }
     };
 
@@ -67,17 +70,12 @@ public class PlaybackService extends Service {
 
         PlaybackCommand action = (PlaybackCommand) extras.get("action"); // start, pause, stop
         SoundType soundType = (SoundType) extras.get("soundType");
-        EnergySavingType playbackType = (EnergySavingType) extras.get("playbackType");
+        playbackType = (EnergySavingType) extras.get("playbackType");
 
         if (PlaybackCommand.START.equals(action)) {
             prepareMedia(soundType);
             playResume(false);
             playFor(playbackType);
-
-        } else if (PlaybackCommand.PAUSE.equals(action)) {
-            prepareMedia(soundType);
-            playResume(true);
-            pauseFor(playbackType);
 
         } else if (PlaybackCommand.STOP.equals(action)) {
             mediaPlayer.stop();
