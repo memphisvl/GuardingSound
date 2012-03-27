@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GuardingSound</string>
+    <string name="app_name">mosQUITo</string>
 
     <string name="energy_prompt">Choose length</string>
     <string-array name="energy_array">
@@ -14,5 +14,7 @@
     <string-array name="sound_array">
         <item>Dragonfly simple</item>
         <item>Dragonfly -6Db</item>
+        <item>Dragonfly LOW</item>
+        <item>Dragonfly HIGH</item>
     </string-array>
 </resources>

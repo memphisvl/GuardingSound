@@ -1,16 +1,17 @@
 package com.weirdapparatus.guardingsound;
 
 import android.app.Activity;
-import android.content.res.AssetFileDescriptor;
-import android.media.MediaPlayer;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import com.weirdapparatus.guardingsound.common.EnergySavingType;
+import com.weirdapparatus.guardingsound.common.PlaybackCommand;
 import com.weirdapparatus.guardingsound.common.SoundType;
-
-import java.io.IOException;
+import com.weirdapparatus.guardingsound.service.PlaybackService;
 
 /**
  * Main class for application
@@ -19,29 +20,12 @@ import java.io.IOException;
  */
 public class MainActivity extends Activity {
 
-    private AssetFileDescriptor descriptor;
-    private MediaPlayer mediaPlayer;
     private static boolean isPlaying = false;
 
     private static SoundType selectedSound = SoundType.DRAGON_FLY; // Default sound
     private static EnergySavingType selectedEnergyType = EnergySavingType.ENDLESS; // Default energy
 
-    private final Handler playbackHandler = new Handler();
-    private final Handler resumeHandler = new Handler();
-
-    private final Runnable pauseSound = new Runnable() {
-        @Override
-        public void run() {
-            pauseSound(true);
-        }
-    };
-
-    private final Runnable resumeSound = new Runnable() {
-        @Override
-        public void run() {
-            playSound();
-        }
-    };
+    private static Intent serviceIntent;
 
     /**
      * Called when the activity is first created.
@@ -57,27 +41,12 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        mediaPlayer = new MediaPlayer();
-        try {
-            descriptor = getAssets().openFd("df_simple.mp3");
-            mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
-            descriptor.close();
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
+    protected void onResume() {
+        super.onResume();
+        if (serviceIntent != null) {
+            isPlaying = true;
+            final Button playStopButton = (Button) findViewById(R.id.playStopButton);
+            playStopButton.setText("Stop");
         }
     }
 
@@ -93,12 +62,6 @@ public class MainActivity extends Activity {
         energyOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                Toast.makeText(
-                        parent.getContext(), "Energy settings: " +
-                        parent.getItemAtPosition(pos).toString(),
-                        Toast.LENGTH_LONG
-                ).show();
-
                 selectedEnergyType = EnergySavingType.getTypeById(pos);
                 energyOptions.setSelection(pos);
             }
@@ -124,31 +87,18 @@ public class MainActivity extends Activity {
         soundOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                Toast.makeText(
-                        parent.getContext(), "Selected sound: " +
-                        parent.getItemAtPosition(pos).toString(),
-                        Toast.LENGTH_LONG
-                ).show();
-
-                selectedSound = SoundType.getSoundTypeById(pos);
+                SoundType newSound = SoundType.getSoundTypeById(pos);
                 soundOptions.setSelection(pos);
 
                 // If we are playing sound, than stop playing
-                final Button playStopButton = (Button) findViewById(R.id.playStopButton);
-                playStopButton.setText("Play");
-                isPlaying = false;
-                mediaPlayer.stop();
+                if (newSound != selectedSound) {
+                    final Button playStopButton = (Button) findViewById(R.id.playStopButton);
+                    playStopButton.setText("Play");
+                    isPlaying = false;
 
-                try {
-                    mediaPlayer = new MediaPlayer();
-                    descriptor = getAssets().openFd(selectedSound.getSound());
-                    mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
-                    descriptor.close();
-                    mediaPlayer.prepare();
-
-                } catch (IOException e) {
-                    Toast.makeText(parent.getContext(), "Cannot initialise playback", Toast.LENGTH_SHORT);
-                    e.printStackTrace();
+                    // stop playback
+                    sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
+                    selectedSound = newSound;
                 }
             }
 
@@ -169,35 +119,26 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 if (isPlaying) {
                     playStopButton.setText("Play");
-                    pauseSound(false);
+                    sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
                     isPlaying = false;
+
                 } else {
                     playStopButton.setText("Stop");
-                    playSound();
+                    sentPlaybackServiceCommand(PlaybackCommand.START, selectedSound, selectedEnergyType);
                     isPlaying = true;
                 }
             }
         });
     }
 
-    private void playSound() {
-        if (mediaPlayer != null) {
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
+    private void sentPlaybackServiceCommand(PlaybackCommand command, SoundType soundType, EnergySavingType energySavingType) {
+        Intent intent = new Intent(this, PlaybackService.class);
+        intent.setAction("com.weirdapparatus.guardingsound.service.PlaybackService");
+        intent.putExtra("action", command);
+        intent.putExtra("soundType", soundType);
+        intent.putExtra("playbackType", energySavingType);
 
-            if (!EnergySavingType.ENDLESS.equals(selectedEnergyType)) {
-                playbackHandler.postDelayed(pauseSound, selectedEnergyType.getPlayTime()); // Play 15 seconds
-            }
-        }
-    }
-
-    private void pauseSound(boolean pausedByHandler) {
-        if (mediaPlayer != null) {
-            mediaPlayer.pause();
-
-            if (!EnergySavingType.ENDLESS.equals(selectedEnergyType) && pausedByHandler) {
-                resumeHandler.postDelayed(resumeSound, selectedEnergyType.getDelayTime()); // Resume after 15 seconds
-            }
-        }
+        serviceIntent = intent;
+        startService(intent);
     }
 }
