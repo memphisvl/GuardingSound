@@ -35,8 +35,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        initEnergyOptions();
-        initSoundOptions();
+        initEnergyOptions(selectedEnergyType);
+        initSoundOptions(selectedSound);
         initHandlers();
     }
 
@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void initEnergyOptions() {
+    private void initEnergyOptions(EnergySavingType selectedEnergyType) {
         final Spinner energyOptions = (Spinner) findViewById(R.id.energyType);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
         energyOptions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                selectedEnergyType = EnergySavingType.getTypeById(pos);
+                MainActivity.selectedEnergyType = EnergySavingType.getTypeById(pos);
                 energyOptions.setSelection(pos);
             }
 
@@ -71,11 +71,15 @@ public class MainActivity extends Activity {
                 // Do nothing here
             }
         });
-        // Select default option
-        energyOptions.setSelection(3);
+        // Select default option or restore selected
+        if (selectedEnergyType != null) {
+            energyOptions.setSelection(selectedEnergyType.ordinal());
+        } else {
+            energyOptions.setSelection(3);
+        }
     }
 
-    private void initSoundOptions() {
+    private void initSoundOptions(SoundType selectedSound) {
         final Spinner soundOptions = (Spinner) findViewById(R.id.soundType);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
@@ -91,14 +95,14 @@ public class MainActivity extends Activity {
                 soundOptions.setSelection(pos);
 
                 // If we are playing sound, than stop playing
-                if (newSound != selectedSound) {
+                if (newSound != MainActivity.selectedSound) {
                     final Button playStopButton = (Button) findViewById(R.id.playStopButton);
                     playStopButton.setText("Play");
                     isPlaying = false;
 
                     // stop playback
                     sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
-                    selectedSound = newSound;
+                    MainActivity.selectedSound = newSound;
                 }
             }
 
@@ -107,8 +111,12 @@ public class MainActivity extends Activity {
                 // Do nothing here
             }
         });
-        // Select default option
-        soundOptions.setSelection(0);
+        // Select default option or restore selected
+        if (selectedSound != null) {
+            soundOptions.setSelection(selectedSound.ordinal());
+        } else {
+            soundOptions.setSelection(0);
+        }
     }
 
     private void initHandlers() {

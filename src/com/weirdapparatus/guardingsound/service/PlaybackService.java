@@ -78,11 +78,12 @@ public class PlaybackService extends Service {
             playFor(playbackType);
 
         } else if (PlaybackCommand.STOP.equals(action)) {
-            mediaPlayer.stop();
-            mediaPlayer = null;
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+                mediaPlayer = null;
+            }
             stopAll();
         }
-
         return START_STICKY; // running until we are stopped
     }
 
