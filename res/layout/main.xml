@@ -6,31 +6,47 @@
 
     <TextView android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+              android:layout_marginTop="20dip"
+              android:layout_marginLeft="10dip"
+              android:textSize="18dip"
               android:text="Energy saving"/>
 
     <Spinner android:id="@+id/energyType"
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
+             android:layout_marginLeft="5dip"
+             android:layout_marginRight="5dip"
              android:prompt="@string/energy_prompt"/>
 
     <TextView android:layout_width="fill_parent"
               android:layout_height="wrap_content"
+              android:layout_marginTop="20dip"
+              android:layout_marginLeft="10dip"
+              android:textSize="18dip"
               android:text="Sound type"/>
 
     <Spinner android:id="@+id/soundType"
              android:layout_width="fill_parent"
              android:layout_height="wrap_content"
+             android:layout_marginLeft="5dip"
+             android:layout_marginRight="5dip"
              android:prompt="@string/sound_prompt"/>
 
-    <LinearLayout android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="30dip">
+    <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:stretchColumns="1">
 
-        <Button android:id="@+id/playStopButton"
-                android:layout_width="fill_parent"
-                android:layout_height="70dip"
-                android:text="Play"/>
-    </LinearLayout>
+        <TableRow android:gravity="center_horizontal">
+            <Button android:id="@+id/playStopButton"
+                    android:layout_width="150dip"
+                    android:layout_height="65dip"
+                    android:background="@drawable/button_shape_green"
+                    android:textSize="18dip"
+                    android:text="Play"/>
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>
 

@@ -126,12 +126,16 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 if (isPlaying) {
+                    // Than stop and put text back to Play
                     playStopButton.setText("Play");
+                    playStopButton.setBackgroundResource(R.drawable.button_shape_green);
                     sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
                     isPlaying = false;
 
                 } else {
+                    // Play and set text to stop
                     playStopButton.setText("Stop");
+                    playStopButton.setBackgroundResource(R.drawable.button_shape_red);
                     sentPlaybackServiceCommand(PlaybackCommand.START, selectedSound, selectedEnergyType);
                     isPlaying = true;
                 }
