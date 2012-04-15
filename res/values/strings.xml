@@ -12,9 +12,9 @@
 
     <string name="sound_prompt">Choose sound</string>
     <string-array name="sound_array">
-        <item>Dragonfly simple</item>
-        <item>Dragonfly -6Db</item>
-        <item>Dragonfly LOW</item>
-        <item>Dragonfly HIGH</item>
+        <item>Dragonfly</item>
+        <item>Combined</item>
+        <item>Ultrasound 1</item>
+        <item>Ultrasound 2</item>
     </string-array>
 </resources>
