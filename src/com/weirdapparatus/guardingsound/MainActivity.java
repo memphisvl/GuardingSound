@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
         if (serviceIntent != null) {
             isPlaying = true;
             final Button playStopButton = (Button) findViewById(R.id.playStopButton);
-            playStopButton.setText("Stop");
+            playStopButton.setBackgroundResource(R.drawable.stop_button);
         }
     }
 
@@ -97,7 +97,7 @@ public class MainActivity extends Activity {
                 // If we are playing sound, than stop playing
                 if (newSound != MainActivity.selectedSound) {
                     final Button playStopButton = (Button) findViewById(R.id.playStopButton);
-                    playStopButton.setText("Play");
+                    playStopButton.setBackgroundResource(R.drawable.play_button);
                     isPlaying = false;
 
                     // stop playback
@@ -127,15 +127,15 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 if (isPlaying) {
                     // Than stop and put text back to Play
-                    playStopButton.setText("Play");
-                    playStopButton.setBackgroundResource(R.drawable.button_shape_green);
+                    //playStopButton.setText("Play");
+                    playStopButton.setBackgroundResource(R.drawable.play_button);
                     sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
                     isPlaying = false;
 
                 } else {
                     // Play and set text to stop
-                    playStopButton.setText("Stop");
-                    playStopButton.setBackgroundResource(R.drawable.button_shape_red);
+                    //playStopButton.setText("Stop");
+                    playStopButton.setBackgroundResource(R.drawable.stop_button);
                     sentPlaybackServiceCommand(PlaybackCommand.START, selectedSound, selectedEnergyType);
                     isPlaying = true;
                 }
