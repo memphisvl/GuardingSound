@@ -1,4 +1,4 @@
-package com.weirdapparatus.guardingsound.common;
+package com.weirdapparatus.mosquito.common;
 
 import java.util.HashMap;
 import java.util.Map;

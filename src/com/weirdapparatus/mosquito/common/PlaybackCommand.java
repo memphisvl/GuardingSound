@@ -1,4 +1,4 @@
-package com.weirdapparatus.guardingsound.common;
+package com.weirdapparatus.mosquito.common;
 
 /**
  * Enum of playback commands which can be sent to service

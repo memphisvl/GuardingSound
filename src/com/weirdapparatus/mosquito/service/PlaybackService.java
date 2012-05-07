@@ -1,4 +1,4 @@
-package com.weirdapparatus.guardingsound.service;
+package com.weirdapparatus.mosquito.service;
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
-import com.weirdapparatus.guardingsound.common.EnergySavingType;
-import com.weirdapparatus.guardingsound.common.PlaybackCommand;
-import com.weirdapparatus.guardingsound.common.SoundType;
+import com.weirdapparatus.mosquito.common.EnergySavingType;
+import com.weirdapparatus.mosquito.common.PlaybackCommand;
+import com.weirdapparatus.mosquito.common.SoundType;
 
 import java.io.IOException;
 

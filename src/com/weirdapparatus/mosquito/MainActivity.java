@@ -1,17 +1,18 @@
-package com.weirdapparatus.guardingsound;
+package com.weirdapparatus.mosquito;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import com.weirdapparatus.guardingsound.common.EnergySavingType;
-import com.weirdapparatus.guardingsound.common.PlaybackCommand;
-import com.weirdapparatus.guardingsound.common.SoundType;
-import com.weirdapparatus.guardingsound.service.PlaybackService;
+import com.weirdapparatus.mosquito.common.EnergySavingType;
+import com.weirdapparatus.mosquito.common.PlaybackCommand;
+import com.weirdapparatus.mosquito.common.SoundType;
+import com.weirdapparatus.mosquito.service.PlaybackService;
 
 /**
  * Main class for application
@@ -127,17 +128,18 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 if (isPlaying) {
                     // Than stop and put text back to Play
-                    //playStopButton.setText("Play");
                     playStopButton.setBackgroundResource(R.drawable.play_button);
                     sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
                     isPlaying = false;
+                    animateBackgroundInReverse(true);
 
                 } else {
+
                     // Play and set text to stop
-                    //playStopButton.setText("Stop");
                     playStopButton.setBackgroundResource(R.drawable.stop_button);
                     sentPlaybackServiceCommand(PlaybackCommand.START, selectedSound, selectedEnergyType);
                     isPlaying = true;
+                    animateBackgroundInReverse(false);
                 }
             }
         });
@@ -145,12 +147,23 @@ public class MainActivity extends Activity {
 
     private void sentPlaybackServiceCommand(PlaybackCommand command, SoundType soundType, EnergySavingType energySavingType) {
         Intent intent = new Intent(this, PlaybackService.class);
-        intent.setAction("com.weirdapparatus.guardingsound.service.PlaybackService");
+        intent.setAction("com.weirdapparatus.mosquito.service.PlaybackService");
         intent.putExtra("action", command);
         intent.putExtra("soundType", soundType);
         intent.putExtra("playbackType", energySavingType);
 
         serviceIntent = intent;
         startService(intent);
+    }
+
+    private void animateBackgroundInReverse(boolean reverse) {
+        View mainView = findViewById(R.id.mainBackground);
+        TransitionDrawable transition = (TransitionDrawable) mainView.getBackground();
+
+        if (Boolean.TRUE.equals(reverse)) {
+            transition.reverseTransition(1000);
+        } else {
+            transition.startTransition(1000);
+        }
     }
 }
