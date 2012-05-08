@@ -44,8 +44,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (serviceIntent != null) {
-            isPlaying = true;
+        if (serviceIntent != null && isPlaying) {
             final Button playStopButton = (Button) findViewById(R.id.playStopButton);
             playStopButton.setBackgroundResource(R.drawable.stop_button);
         }
@@ -96,10 +95,11 @@ public class MainActivity extends Activity {
                 soundOptions.setSelection(pos);
 
                 // If we are playing sound, than stop playing
-                if (newSound != MainActivity.selectedSound) {
+                if (newSound != MainActivity.selectedSound && isPlaying) {
                     final Button playStopButton = (Button) findViewById(R.id.playStopButton);
                     playStopButton.setBackgroundResource(R.drawable.play_button);
                     isPlaying = false;
+                    animateBackgroundInReverse(true, 1000);
 
                     // stop playback
                     sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
@@ -131,7 +131,7 @@ public class MainActivity extends Activity {
                     playStopButton.setBackgroundResource(R.drawable.play_button);
                     sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
                     isPlaying = false;
-                    animateBackgroundInReverse(true);
+                    animateBackgroundInReverse(true, 1000);
 
                 } else {
 
@@ -139,7 +139,7 @@ public class MainActivity extends Activity {
                     playStopButton.setBackgroundResource(R.drawable.stop_button);
                     sentPlaybackServiceCommand(PlaybackCommand.START, selectedSound, selectedEnergyType);
                     isPlaying = true;
-                    animateBackgroundInReverse(false);
+                    animateBackgroundInReverse(false, 1000);
                 }
             }
         });
@@ -156,14 +156,14 @@ public class MainActivity extends Activity {
         startService(intent);
     }
 
-    private void animateBackgroundInReverse(boolean reverse) {
+    private void animateBackgroundInReverse(boolean reverse, int length) {
         View mainView = findViewById(R.id.mainBackground);
         TransitionDrawable transition = (TransitionDrawable) mainView.getBackground();
 
         if (Boolean.TRUE.equals(reverse)) {
-            transition.reverseTransition(1000);
+            transition.reverseTransition(length);
         } else {
-            transition.startTransition(1000);
+            transition.startTransition(length);
         }
     }
 }

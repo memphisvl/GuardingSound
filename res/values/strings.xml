@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">mosQUITo</string>
 
-    <string name="energy_prompt">Choose length</string>
+    <string name="energy_prompt">Choose play mode</string>
     <string-array name="energy_array">
         <item>15 sec play / 45 sec pause</item>
         <item>30 sec play / 30 sec pause</item>
