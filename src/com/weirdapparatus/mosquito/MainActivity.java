@@ -103,8 +103,9 @@ public class MainActivity extends Activity {
 
                     // stop playback
                     sentPlaybackServiceCommand(PlaybackCommand.STOP, null, null);
-                    MainActivity.selectedSound = newSound;
                 }
+                // Update selected sound
+                MainActivity.selectedSound = newSound;
             }
 
             @Override
@@ -112,6 +113,7 @@ public class MainActivity extends Activity {
                 // Do nothing here
             }
         });
+
         // Select default option or restore selected
         if (selectedSound != null) {
             soundOptions.setSelection(selectedSound.ordinal());
