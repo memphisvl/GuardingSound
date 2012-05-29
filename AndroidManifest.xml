@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.weirdapparatus.mosquito"
           android:versionCode="1"
-          android:versionName="1.0">
+          android:versionName="1.1">
 
     <uses-sdk android:minSdkVersion="10"/>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application android:label="@string/app_name"
                  android:icon="@drawable/ic_launcher"

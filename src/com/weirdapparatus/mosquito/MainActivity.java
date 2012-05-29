@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import com.flurry.android.FlurryAgent;
 import com.weirdapparatus.mosquito.common.EnergySavingType;
 import com.weirdapparatus.mosquito.common.PlaybackCommand;
 import com.weirdapparatus.mosquito.common.SoundType;
@@ -39,6 +40,21 @@ public class MainActivity extends Activity {
         initEnergyOptions(selectedEnergyType);
         initSoundOptions(selectedSound);
         initHandlers();
+    }
+
+    /**
+     * For analytics only
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FlurryAgent.onStartSession(this, "RTHCP1XP1KY5JIPTDNHE");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        FlurryAgent.onEndSession(this);
     }
 
     @Override

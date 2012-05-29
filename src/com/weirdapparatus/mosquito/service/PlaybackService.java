@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
+import com.flurry.android.FlurryAgent;
 import com.weirdapparatus.mosquito.common.EnergySavingType;
 import com.weirdapparatus.mosquito.common.PlaybackCommand;
 import com.weirdapparatus.mosquito.common.SoundType;
@@ -64,8 +65,28 @@ public class PlaybackService extends Service {
         }
     }
 
+    /**
+     * For analytics only
+     */
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
+        FlurryAgent.onStartSession(this, "RTHCP1XP1KY5JIPTDNHE");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        FlurryAgent.onEndSession(this);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // Guarding condition to prevent NPE
+        if (intent == null)
+            return 2;
+
         Bundle extras = intent.getExtras();
 
         PlaybackCommand action = (PlaybackCommand) extras.get("action"); // start, pause, stop
